@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Association </title>
+        <script src="lib/p5/p5.min.js"></script>
+        <script src="lib/p5/p5.dom.min.js"></script>
+        <script src="lib/p5/p5.sound.min.js"></script>
+        <script src="lib/FileSaver.js"></script>
+        <script>
+            Element.prototype.remove = function() {
+                this.parentElement.removeChild(this);
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
+        <link rel="stylesheet" type="text/css" href="styles/play.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+        <script src="scripts/AIThing.js"></script>
+
+        <script src="scripts/main.js"></script>
+    </head>
+    
+    <body class="box">
+        <div class="content header">
+            <button onclick="window.open('home.html', '_self')">Home</button>
+        <!--                 <button onclick="saveMemory()">Save</button> -->
+            <button onclick="saveMemory(true)">Download</button>
+        </div>
+        
+        <div id="Main" class="box content">
+            <div id="upper" class="content">
+                <div>
+                    <p>Submit related terms for it to learn.</p>
+                    <div>
+                        <input id="word1" class="words"></input><br>
+                        <input id="word2" class="words"></input><br>
+                    </div>
+                    <button onclick="submitMemory()">Submit</button>
+
+                    <button onclick="submitMemory(false)">Next</button>
+                </div>
+            </div>
+
+            <div id="lower" class="content">
+                <div>
+                    <p>Enter a term to see its related terms.</p>
+                    <input id="word3" class="words"></input><button onclick="getMemory()">Submit</button>
+                    <button onclick="hideMemory()">Hide</button>
+                    <p id="term1" style="color: white; font-family:monaco, monospace; background-color:black;"></p>
+                    </div>
+                    <ul id="related" class="words" style="margin:0px; overflow-y:scroll;">
+                        </ul>
+                </div>
+
+            
+        </div>
+        
+        <div class="content footer">
+                <p> Get a <b><a onclick="getRandomWord()" style="display:inline; color:gold;">random</a></b> term. <button onclick="getMemory(document.getElementById('getWordP').innerHTML)">Explore</button></p>
+                <p style="display:inline;"> Term: <a id="getWordP" class="clickable" onclick="playWord(this.innerHTML)" style="display:inline; color:gold;"></a></p>
+                <!--                 <p> Term: <a id="getWordP" class="clickable" onclick="getMemory(document.getElementById('getWordP').innerHTML)"></a></p> -->
+                
+                <br>
+                <p id="learned" class="faded"'>New associations will appear here.</p>
+        </div>
+
+        <script id="startupScript">
+            let self = document.getElementById("startupScript");
+            document.getElementById('word1').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    document.getElementById('word2').focus();
+                }
+//                 console.log(event.keyCode);
+//                 playWord();
+            });
+
+            document.getElementById('word2').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    submitMemory();
+
+                    if(document.getElementById('word1').value == '') {
+                        document.getElementById('word1').focus();
+                    } else {
+                        this.focus();
+                    }
+                    return;
+                }
+//                 console.log(event.keyCode);
+//                 playWord();
+            });
+
+            document.getElementById('word3').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    getMemory();
+                    this.blur();
+//                     document.getElementById('terms').focus();
+                }
+//                 console.log(event.keyCode);
+//                 playWord();
+            });
+
+            document.getElementById('word4').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    playWord();
+//                     this.blur();
+                }
+            });
+
+            document.getElementById('word5').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    document.getElementById('word6').focus();
+                }
+            });
+
+            document.getElementById('word6').addEventListener('keydown', function(event) {
+                if(event.keyCode == '13') {
+                    teach();
+                    if(document.getElementById('word5').value == '') {
+//                         document.getElementById('word4').focus();
+                    } else {
+                        this.focus();
+                    }
+                    return;
+                }
+            });
+
+
+
+
+            document.getElementById('file').addEventListener('change', function (evt) {
+               let files = evt.target.files;
+               let file = files[0];           
+               let reader = new FileReader();
+               reader.onload = function(event) {
+                    let result = event.target.result;
+                    ai.loadMemory(JSON.parse(result));           
+               }
+               let tempTxt = reader.readAsText(file);
+//                console.log(tempTxt);
+            }, false);
+
+           
+
+//             document.getElementById('terms').addEventListener('keydown', function(event) {
+//                 if(event.keyCode == '13') {
+//                     document.getElementById('word3').focus();
+// //                     return;
+//                     console.log('adhjl');
+//                 }
+//             });
+            var updateTimer = setInterval(function() {
+                let p = document.getElementById('wordCount');
+                let count = ai.getAssociations().length;
+                p.innerHTML = `Currently knows ${count} words!`;
+            }, 1000);
+            
+
+
+            self.remove();
+        </script>
+    </body>
+</html>

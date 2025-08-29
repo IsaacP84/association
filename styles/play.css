@@ -1,0 +1,66 @@
+html, body {
+  height: 100%;
+  background-color: gray;
+  margin: 0;
+}
+
+.faded {
+  opacity:0.7;
+}
+
+body.box{
+    display: flex;
+    overflow: hidden;
+  flex-flow: column;
+}
+
+canvas {
+  display: block;
+}
+
+p{
+  margin: 0px;
+  font-family: arial, sans-serif;
+}
+
+.box .part {
+/*   border: 1px dotted grey; */
+}
+
+.box .part.content {
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  overflow-y: auto;
+
+/*   width:50%; */
+}
+
+#upper.content{
+    height:20%;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+#lower.content{
+  
+}
+
+#Main.box {
+  background-color: #078DB5;
+/*   max-width:40%; */
+}
+
+#Play.box {
+  background-color: #078DB5;
+/*   min-width:60%; */
+}
+
+
+
+#Main, #Play {
+/*   height: 100%; */
+/*   flex: 1 1 auto; */
+/*   width:50%; */
+  padding:2%;
+}

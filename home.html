@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Association - Home</title>
+        <script src="lib/p5/p5.min.js"></script>
+        <script src="lib/p5/p5.dom.min.js"></script>
+        <script src="lib/FileSaver.js"></script>
+
+        <script>
+            Element.prototype.remove = function() {
+                this.parentElement.removeChild(this);
+            }
+        </script>
+        <link rel="stylesheet" type="text/css" href="styles/style.css">
+        <link rel="stylesheet" type="text/css" href="styles/home.css">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+        <script src="scripts/AIThing.js"></script>
+
+        <script src="scripts/main.js"></script>
+        
+<!--         <link rel="stylesheet" type="text/css" href="styles/style.css"> -->
+    </head>
+
+
+    <body class="box">
+        <div class="content header">
+                <button onclick="window.open('home.html', '_self')">Home</button>
+                <button onclick="saveMemory(true)">Download</button>
+                <input type="file" id="file"/>
+        </div>
+        
+        <div id="Main" class="box">
+            <div class="content">
+                <button onclick="window.open('association.html', '_self')">Play</button>
+                <button onclick="window.open('analysis.html', '_self')">Data</button>
+            </div>
+            
+            
+        </div>
+        <div class="box content footer">
+            <p id="wordCount" class="content noSelect"><p>
+        </div>
+
+        <script id="startupScript">
+            let self = document.getElementById("startupScript");
+            
+            document.getElementById('file').addEventListener('change', function (evt) {
+               let files = evt.target.files;
+               let file = files[0];           
+               let reader = new FileReader();
+               reader.onload = function(event) {
+                    let result = event.target.result;
+                    ai.loadMemory(JSON.parse(result));           
+               }
+               let tempTxt = reader.readAsText(file);
+//                console.log(tempTxt);
+            }, false);
+
+           
+
+//             document.getElementById('terms').addEventListener('keydown', function(event) {
+//                 if(event.keyCode == '13') {
+//                     document.getElementById('word3').focus();
+// //                     return;
+//                     console.log('adhjl');
+//                 }
+//             });
+            var updateTimer = setInterval(function() {
+                let p = document.getElementById('wordCount');
+                let count = ai.getAssociations().length;
+                p.innerHTML = `Currently knows ${count} words!`;
+            }, 1000);
+            
+
+
+            self.remove();
+        </script>
+
+    </body>
+</html>
